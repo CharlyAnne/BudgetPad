@@ -379,8 +379,27 @@ def expenseHistory(request):
             expenses = AddExpense_info.objects.filter(
                 user=request.user).order_by('date')
 
+            # Get the distinct expense categories
+            expense_categories = AddExpense_info.objects.filter(
+                user=request.user).values('category').distinct()
+
+            # Filter expenses by category if selected
+            category = request.GET.get('sort_by')
+            if category:
+                expenses = AddExpense_info.objects.filter(
+                    user=request.user, category=category).order_by('date')
+            else:
+                expenses = AddExpense_info.objects.filter(
+                    user=request.user).order_by('date')
+
+            paginator = Paginator(expenses, 10)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
+
             context = {
                 'expenses': expenses,
+                'page_obj': page_obj,
+                'expense_categories': expense_categories,
             }
 
             # if profile is completed
