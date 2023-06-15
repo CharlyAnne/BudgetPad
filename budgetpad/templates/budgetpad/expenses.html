@@ -28,27 +28,40 @@
           <h4 class="card-title">Expenses</h4>
           <h6 class="card-subtitle">Track your expenses here</h6>
           <div class="table-responsive">
-            <form
-              action="{% url 'expenses' %}"
-              method="get"
-              class="d-inline-block"
-            >
-              Sort by:
-              <select
-                name="sort_by"
-                id="sort-by-select"
-                onchange="this.form.submit()"
-              >
-                <option value="">All Categories</option>
-                {% for category in expense_categories %}
-                <option value="{{ category.category }}">
-                  {{ category.category }}
-                </option>
+            <h2>Today's expenses</h2>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Date</th>
+                  <th>Expense Name</th>
+                  <th>Amount</th>
+                  <th>Category</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for expense in today_expenses %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ expense.date }}</td>
+                  <td contenteditable="true">{{ expense.add_expense }}</td>
+                  <td contenteditable="true">{{ expense.amount }}</td>
+                  <td contenteditable="true">{{ expense.category }}</td>
+                  <td>
+                    <a href="{% url 'expense_edit' expense.id %}">Edit</a>
+                    <a href="{% url 'expense_delete' expense.id %}">Delete</a>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="6">No expenses spent and recorded today.</td>
+                </tr>
                 {% endfor %}
-                <!--<option value="date" {% if sort_by == 'date' %}selected{% endif %}>Due Date</option>
-                <option value="category" {% if sort_by == 'category' %}selected{% endif %}>Category</option>-->
-              </select>
-            </form>
+              </tbody>
+            </table>
+          </div>
+          <div class="table-responsive">
+            <h2>Future Expenses</h2>
             <table class="table">
               <thead>
                 <tr>
@@ -61,15 +74,13 @@
                 </tr>
               </thead>
               <tbody>
-                {% for expense in expenses %}
+                {% for expense in future_expenses %}
                 <tr>
                   <td>{{ forloop.counter }}</td>
                   <td>{{ expense.date }}</td>
                   <td contenteditable="true">{{ expense.add_expense }}</td>
                   <td contenteditable="true">{{ expense.amount }}</td>
-                  <td contenteditable="true" required="False">
-                    {{ expense.due_date }}
-                  </td>
+                  <td contenteditable="true">{{ expense.due_date }}</td>
                   <td contenteditable="true">{{ expense.category }}</td>
                   <td>
                     <a href="{% url 'expense_edit' expense.id %}">Edit</a>
@@ -78,12 +89,13 @@
                 </tr>
                 {% empty %}
                 <tr>
-                  <td colspan="6">No expenses found.</td>
+                  <td colspan="6">No future expenses recorded yet.</td>
                 </tr>
                 {% endfor %}
               </tbody>
             </table>
           </div>
+
           {% if page_obj.has_previous %}
           <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
           {% endif %}

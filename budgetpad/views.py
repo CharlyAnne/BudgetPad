@@ -1,23 +1,23 @@
 import datetime
-from django.contrib import messages
-from django.contrib.auth import authenticate, logout
-from django.contrib.auth import login as dj_login
-from django.contrib.auth.models import User
-from django.contrib.sessions.models import Session
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.db.models import Sum
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect, render, get_object_or_404
-from django.utils import timezone
-from django.urls import reverse
+import json
 from .forms import UserProfileForm
 from .forms import AddExpenseForm
-from django.contrib.auth.decorators import login_required
-from django.db.models import F
-import json
-from django.db.models.functions import TruncMonth, TruncWeek, TruncDay
-
+from django.contrib import messages
+from django.contrib.auth.models import User
 from .models import AddExpense_info, UserProfile
+from django.contrib.auth import authenticate, logout
+from django.contrib.auth import login as dj_login
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect, render, get_object_or_404
+from django.contrib.sessions.models import Session
+from django.http import HttpResponse, JsonResponse
+from django.utils import timezone
+from django.urls import reverse
+from django.db.models import Sum
+from django.db.models import F
+from django.db.models import Q
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.db.models.functions import TruncMonth, TruncWeek, TruncDay
 
 
 def home(request):
@@ -229,9 +229,20 @@ def expenses(request):
         profile_completed = user_profile.profile_completed
 
         if profile_completed:
+            # Get the current date
+            current_date = timezone.now().date()
+
             # Get the distinct expense categories
             expense_categories = AddExpense_info.objects.filter(
                 user=request.user).values('category').distinct()
+
+            # Filter expenses spent and recorded today
+            today_expenses = AddExpense_info.objects.filter(
+                user=request.user, date=current_date)
+
+            # Filter future expenses with due date recorded
+            future_expenses = AddExpense_info.objects.filter(
+                user=request.user, due_date__gt=current_date)
 
             # Filter expenses by category if selected
             category = request.GET.get('sort_by')
@@ -250,6 +261,8 @@ def expenses(request):
                 'expense_categories': expense_categories,
                 'expenses': page_obj,
                 'page_obj': page_obj,
+                'today_expenses': today_expenses,
+                'future_expenses': future_expenses,
             }
 
             # if profile is completed
@@ -356,18 +369,18 @@ def addExpense_update(request, id):
 
 
 def expenseHistory(request):
-    """Returns the expense history view"""
+    """Returns all user expenses' history view"""
     if request.session.has_key('is_logged'):
         user_profile = request.user.userprofile
         profile_completed = user_profile.profile_completed
 
         if profile_completed:
-            expenses_by_date = AddExpense_info.objects.filter(user=request.user).annotate(
-                month=TruncMonth('date'), week=TruncWeek('date'), day=TruncDay('date')
-            ).values('month', 'week', 'day').annotate(total_amount=Sum('amount'))
+            # Get all expenses of the user
+            expenses = AddExpense_info.objects.filter(
+                Q(user=request.user) | Q(deleted=True)).order_by('date')
 
             context = {
-                'expenses_by_date': expenses_by_date,
+                'expenses': expenses,
             }
 
             # if profile is completed
