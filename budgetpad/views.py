@@ -395,7 +395,7 @@ def expenseHistory(request):
             page_obj = paginator.get_page(page_number)
 
             context = {
-                'expenses': expenses,
+                'expenses': page_obj,
                 'page_obj': page_obj,
                 'expense_categories': expense_categories,
             }
