@@ -25,7 +25,11 @@
       <div class="card expense">
         <div class="card-block">
           <h4 class="card-title">Expenses</h4>
-          <h6 class="card-subtitle">{{ expense.month|date:"F Y" }}</h6>
+          {% for expense in expenses_by_date %}
+          <h6 class="card-subtitle">
+            {{ expense.month|date:"F Y" }} || {{ expense.total_amount }} NGN
+          </h6>
+          {% endfor %}
           <div class="table-responsive">
             <form
               action="{% url 'expenses' %}"
@@ -39,11 +43,11 @@
                 onchange="this.form.submit()"
               >
                 <option value="">All Categories</option>
-                {% for category in expense_categories %} {% if category %}
+                {% for category in expense_categories %}
                 <option value="{{ category.category }}">
                   {{ category.category }}
                 </option>
-                {% endif %} {% endfor %}
+                {% endfor %}
                 <!--<option value="date" {% if sort_by == 'date' %}selected{% endif %}>Due Date</option>
                 <option value="category" {% if sort_by == 'category' %}selected{% endif %}>Category</option>-->
               </select>
@@ -81,34 +85,6 @@
             </table>
           </div>
 
-          <div class="table-responsive">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>Month</th>
-                  <th>Total Amount</th>
-                  <!--<th>#</th>
-                    <th>Date</th>
-                    <th>Expense Name</th>
-                    <th>Amount</th>
-                    <th>Due Date</th>
-                    <th>Category</th>-->
-                </tr>
-              </thead>
-              <tbody>
-                {% for expense in expenses_by_date %}
-                <tr>
-                  <td>{{ expense.month|date:"F Y" }}</td>
-                  <!-- Display month and year -->
-                  <!--<td>{{ expense.week|date:"W, Y" }}</td> <! Display week and year -->
-                  <!--<td>{{ expense.day|date:"F j, Y" }}</td> <! Display day, month, and year -->
-
-                  <td>{{ expense.total_amount }} NGN</td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
           {% if page_obj.has_previous %}
           <a href="?page={{ page_obj.previous_page_number }}">previous</a>
           {% endif %}
