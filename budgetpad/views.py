@@ -376,7 +376,7 @@ def expenseHistory(request):
 
         if profile_completed:
             expenses = AddExpense_info.objects.filter(
-                user=request.user).order_by(date)
+                user=request.user).order_by('date')
             # Get the distinct expense categories
             expense_categories = AddExpense_info.objects.filter(
                 user=request.user).values('category').distinct()
