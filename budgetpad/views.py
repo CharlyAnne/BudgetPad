@@ -387,10 +387,7 @@ def expenseHistory(request):
             category = request.GET.get('sort_by')
             if category:
                 expenses = AddExpense_info.objects.filter(
-                    user=request.user, category=category).order_by('date')
-            else:
-                expenses = AddExpense_info.objects.filter(
-                    user=request.user).order_by('date')
+                    user=request.user, category=category)
 
             paginator = Paginator(expenses, 10)
             page_number = request.GET.get('page')
