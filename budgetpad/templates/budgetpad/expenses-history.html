@@ -84,13 +84,12 @@
               </tbody>
             </table>
           </div>
-
           {% if page_obj.has_previous %}
-          <a href="?page={{ expenses.previous_page_number }}">Previous</a>
+          <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
           {% endif %}
-          <span class="current-page">{{ expenses.number }}</span>
-          {% if expenses.has_next %}
-          <a href="?page={{ expenses.next_page_number }}">Next</a>
+          <span class="current-page">{{ page_obj.number }}</span>
+          {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">Next</a>
           {% endif %}
         </div>
       </div>
