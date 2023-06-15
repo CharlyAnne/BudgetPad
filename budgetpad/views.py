@@ -377,7 +377,7 @@ def expenseHistory(request):
         if profile_completed:
             # Get all expenses of the user
             expenses = AddExpense_info.objects.filter(
-                Q(user=request.user) | Q(deleted=True)).order_by('date')
+                user=request.user).order_by('date')
 
             context = {
                 'expenses': expenses,
