@@ -238,20 +238,20 @@ def expenses(request):
 
             # Filter expenses spent and recorded today
             today_expenses = AddExpense_info.objects.filter(
-                user=request.user, date=current_date)
+                user=request.user, date=current_date).order_by('-date')
 
             # Filter future expenses with due date recorded
             future_expenses = AddExpense_info.objects.filter(
-                user=request.user, due_date__gt=current_date)
+                user=request.user, due_date__gt=current_date).order_by('-date')
 
             # Filter expenses by category if selected
             category = request.GET.get('sort_by')
             if category:
                 expenses = AddExpense_info.objects.filter(
-                    user=request.user, category=category).order_by('date')
+                    user=request.user, category=category).order_by('-date')
             else:
                 expenses = AddExpense_info.objects.filter(
-                    user=request.user).order_by('date')
+                    user=request.user).order_by('-date')
 
             paginator = Paginator(expenses, 10)
             page_number = request.GET.get('page')
@@ -259,10 +259,10 @@ def expenses(request):
 
             context = {
                 'expense_categories': expense_categories,
-                'expenses': page_obj,
-                'page_obj': page_obj,
                 'today_expenses': today_expenses,
                 'future_expenses': future_expenses,
+                'expenses': page_obj,
+                'page_obj': page_obj,
             }
 
             # if profile is completed

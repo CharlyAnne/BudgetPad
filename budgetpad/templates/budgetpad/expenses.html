@@ -25,10 +25,9 @@
     <div class="card">
       <div class="card expense">
         <div class="card-block">
-          <h4 class="card-title">Expenses</h4>
+          <h4 class="card-title">Today's Expenses</h4>
           <h6 class="card-subtitle">Track your expenses here</h6>
           <div class="table-responsive">
-            <h2>Today's expenses</h2>
             <table class="table">
               <thead>
                 <tr>
@@ -37,6 +36,7 @@
                   <th>Expense Name</th>
                   <th>Amount</th>
                   <th>Category</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -60,12 +60,18 @@
               </tbody>
             </table>
           </div>
-          {% if page_obj.has_previous %}
-          <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+          {% if today_expenses.has_previous %}
+          <a
+            href="?sort_by={{ sort_by }}&page={{ today_expenses.previous_page_number }}"
+            >Previous</a
+          >
           {% endif %}
-          <span class="current-page">{{ page_obj.number }}</span>
-          {% if page_obj.has_next %}
-          <a href="?page={{ page_obj.next_page_number }}">Next</a>
+          <span class="current-page">{{ today_expenses.number }}</span>
+          {% if today_expenses.has_next %}
+          <a
+            href="?sort_by={{ sort_by }}&page={{ today_expenses.next_page_number }}"
+            >Next</a
+          >
           {% endif %}
         </div>
       </div>
@@ -74,10 +80,9 @@
     <div class="card">
       <div class="card expense">
         <div class="card-block">
-          <h4 class="card-title">Expenses</h4>
+          <h4 class="card-title">Future's Expenses</h4>
           <h6 class="card-subtitle">Track your expenses here</h6>
           <div class="table-responsive">
-            <h2>Future Expenses</h2>
             <table class="table">
               <thead>
                 <tr>
@@ -86,6 +91,7 @@
                   <th>Amount</th>
                   <th>Due Date</th>
                   <th>Category</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -109,13 +115,15 @@
               </tbody>
             </table>
           </div>
-
-          {% if page_obj.has_previous %}
-          <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+          {% if future_expenses.has_previous %}
+          <a
+            href="?sort_by={{ sort_by }}&page={{ future_expenses.previous_page_number }}"
+            >Previous</a
+          >
           {% endif %}
-          <span class="current-page">{{ page_obj.number }}</span>
-          {% if page_obj.has_next %}
-          <a href="?page={{ page_obj.next_page_number }}">Next</a>
+          <span class="current-page">{{future_expenses.number }}</span>
+          {% if future_expenses.has_next %}
+          <a href="?page={{ future_expenses.next_page_number }}">Next</a>
           {% endif %}
         </div>
       </div>
