@@ -113,12 +113,13 @@
               <li class="nav-item dropdown">
                 <a
                   class="nav-link dropdown-toggle text-muted waves-effect waves-dark"
-                  href="{% url 'profile_edit' %}"
-                  ><img
-                    src="{% static '/images/users/CharlY-modified (Custom).png' %}"
-                    alt="user"
-                    class="profile-pic m-r-10"
-                  />{{ user.username }}</a
+                  href="{% url 'profile' %}"
+                  >{% if user.userprofile.profile_picture %}
+                  <img
+                    src="{{ user.userprofile.profile_picture.url }}"
+                    class="img-circle"
+                    width="150"
+                  />{% endif %}</a
                 >
               </li>
             </ul>
