@@ -131,9 +131,9 @@
                   >{% if user.userprofile.profile_picture %}
                   <img
                     src="{{ user.userprofile.profile_picture.url }}"
-                    class="img-circle"
-                    width="150"
-                  />{% endif %}</a
+                    class="profile-pic m-r-10"
+                    alt="user"
+                  />{% endif %} {{ user.username }}</a
                 >
               </li>
             </ul>
