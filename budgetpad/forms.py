@@ -25,10 +25,11 @@ SELECT_CATEGORY_CHOICES = [
 class UserProfileForm(UserChangeForm):
     profession = forms.ChoiceField(choices=PROFESSION_CHOICES)
     income = forms.DecimalField(max_digits=10, decimal_places=2)
-
+    profile_picture = forms.ImageField(required=False)
+    
     class Meta:
         model = UserProfile
-        fields = ['first_name', 'last_name', 'profession', 'income']
+        fields = ['first_name', 'last_name', 'profession', 'income', 'profile_picture']
     # fname = forms.CharField(label='First Name', max_length=100)
     # lname = forms.CharField(label='Last Name', max_length=100)
     # profession = forms.ChoiceField(

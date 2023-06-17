@@ -138,6 +138,9 @@ SASS_PROCESSOR_ROOT = STATIC_ROOT
 # os.path.join(BASE_DIR, 'static', 'assets', 'scss'),
 # ]
 
+# Media files
+MEDIA_URL = 'budgetpad/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'budgetpad/media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

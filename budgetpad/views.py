@@ -148,15 +148,19 @@ def profile_update(request):
     profile = user.userprofile
 
     if request.method == "POST":
-        form = UserProfileForm(request.POST, instance=user)
+        form = UserProfileForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             user.first_name = form.cleaned_data['first_name']
             user.last_name = form.cleaned_data['last_name']
             profile.profession = form.cleaned_data['profession']
             profile.income = form.cleaned_data['income']
-            # user.userprofile.profile_completed = True
-            form.save()
             profile.profile_completed = True
+
+            # Check if profile picture was uploaded
+            if 'profile_picture' in request.FILES:
+                profile.profile_picture = request.FILES['profile_picture']
+
+            form.save()
             profile.save()
             return redirect('profile')
     else:
