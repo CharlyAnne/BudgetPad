@@ -1,6 +1,3 @@
-## ALX Foundation Project
-
-
 ## BudgetPad
 
 This is a personal budgeting and Expense Tracking Web Application built for users to budget and track the items they buy and their respective prices. 
@@ -35,5 +32,6 @@ After login, users can:
 
 
 ## Authors 
-
+Charlian Imoisili
+Mercy Igwe
 
